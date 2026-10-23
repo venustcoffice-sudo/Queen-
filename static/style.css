@@ -1,0 +1,97 @@
+
+:root {
+  color-scheme: dark;
+  --bg: #0b0b12;
+  --panel: #151521;
+  --gold: #e6c36a;
+  --text: #f5f5f7;
+  --muted: #a6a6b6;
+  --border: #303040;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 6%;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  color: var(--gold);
+  font-size: 25px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+nav { display: flex; flex-wrap: wrap; gap: 15px; }
+nav a, .panel a { color: var(--gold); text-decoration: none; }
+
+main { max-width: 900px; margin: 45px auto; padding: 0 18px; }
+
+.hero, .panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 28px;
+  margin-bottom: 22px;
+}
+
+.hero { text-align: center; padding: 65px 24px; }
+.hero h1 { font-size: clamp(32px, 7vw, 56px); }
+.hero h1 span, .eyebrow { color: var(--gold); }
+.muted, footer { color: var(--muted); font-size: 14px; }
+
+.button, button {
+  display: inline-block;
+  background: var(--gold);
+  color: #17120a;
+  border: 0;
+  border-radius: 9px;
+  padding: 12px 18px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+.secondary { background: #484858; color: white; }
+
+form { display: grid; gap: 10px; }
+input, select {
+  width: 100%;
+  padding: 12px;
+  background: #0d0d16;
+  color: white;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.balance { color: var(--gold); font-size: 34px; font-weight: bold; }
+.request, .notice {
+  border: 1px solid var(--border);
+  padding: 14px;
+  border-radius: 10px;
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+}
+
+.request span { color: var(--gold); margin-left: 8px; }
+.notice { background: #25251c; }
+footer { text-align: center; padding: 25px; }
+
+@media (max-width: 520px) {
+  header { align-items: flex-start; flex-direction: column; }
+  .hero, .panel { padding: 20px; }
+}
