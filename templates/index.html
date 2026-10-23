@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QUEEN Investment Platform</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <a class="brand" href="/">QUEEN</a>
+  <nav>
+    <a href="/">Home</a>
+    {% if session.get('user_id') %}
+      <a href="/dashboard">Dashboard</a>
+      <a href="/logout">Logout</a>
+    {% else %}
+      <a href="/register">Register</a>
+      <a href="/login">Login</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main>
+  {% for message in get_flashed_messages() %}
+    <div class="notice">{{ message }}</div>
+  {% endfor %}
+
+  {% if page == "home" %}
+    <section class="hero">
+      <p class="eyebrow">A DIGITAL FINANCIAL PLATFORM</p>
+      <h1>Welcome to <span>QUEEN</span></h1>
+      <p>Create an account to submit deposit or withdrawal requests.</p>
+      <a class="button" href="/register">Get Started</a>
+    </section>
+
+  {% elif page == "register" %}
+    <section class="panel">
+      <h1>Create Account</h1>
+      <form method="post">
+        <label>Username</label>
+        <input name="username" minlength="3" required>
+        <label>Password (10+ characters)</label>
+        <input type="password" name="password" minlength="10" required>
+        <button>Create Account</button>
+      </form>
+    </section>
+
+  {% elif page == "login" %}
+    <section class="panel">
+      <h1>Login</h1>
+      <form method="post">
+        <label>Username</label>
+        <input name="username" required>
+        <label>Password</label>
+        <input type="password" name="password" required>
+        <button>Login</button>
+      </form>
+    </section>
+
+  {% elif page == "dashboard" %}
+    <section class="panel">
+      <h1>Welcome, {{ user.username }}</h1>
+      <p>Available demo balance</p>
+      <div class="balance">${{ "%.2f"|format(user.balance) }}</div>
+      <p class="muted">Demo balance only. Requests require manual review.</p>
+    </section>
+    <section class="panel">
+      <h2>New Request</h2>
+      <form method="post" action="/request">
+        <label>Request Type</label>
+        <select name="kind" required>
+          <option value="Deposit">Deposit</option>
+          <option value="Withdrawal">Withdrawal</option>
+        </select>
+        <label>Amount (USD)</label>
+        <input type="number" name="amount" min="0.01" max="100000" step="0.01" required>
+        <button>Submit Request</button>
+      </form>
+    </section>
+    <section class="panel">
+      <h2>My Requests</h2>
+      {% for item in requests_list %}
+        <div class="request">
+          <b>{{ item.kind }}</b> — ${{ "%.2f"|format(item.amount) }}
+          <span>{{ item.status }}</span>
+        </div>
+      {% else %}
+        <p>No requests yet.</p>
+      {% endfor %}
+    </section>
+
+  {% elif page == "admin_login" %}
+    <section class="panel">
+      <h1>Admin Login</h1>
+      <form method="post">
+        <label>Admin Password</label>
+        <input type="password" name="password" required>
+        <button>Login</button>
+      </form>
+    </section>
+
+  {% elif page == "admin" %}
+    <section class="panel">
+      <h1>Admin Requests</h1>
+      <a href="/admin/logout">Logout Admin</a>
+      {% for item in requests_list %}
+        <div class="request">
+          <b>{{ item.username }}</b><br>
+          {{ item.kind }} — ${{ "%.2f"|format(item.amount) }}
+          <span>{{ item.status }}</span>
+          {% if item.status == "Pending" %}
+            <form method="post" action="/admin/review/{{ item.id }}">
+              <button name="decision" value="Approve">Approve</button>
+              <button class="secondary" name="decision" value="Reject">Reject</button>
+            </form>
+          {% endif %}
+        </div>
+      {% else %}
+        <p>No requests yet.</p>
+      {% endfor %}
+    </section>
+  {% endif %}
+</main>
+
+<footer>QUEEN · Demo platform · Financial transactions are not automatic.</footer>
+</body>
+</html>
